@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thailand SEA Games Medals</title>
+    <script src="https://d3js.org/d3.v7.js"></script>
+    <style>
+        .center {
+          margin: auto;
+          width: 60%;
+          padding: 10px;
+        }
+        </style>
+</head>
+<body>
+    <br>
+<div class="center">
+    <h2 style="text-align:center;">Gold Medals Thailand has Received in SEA Games 1959 - 2023</h2>
+    <form style="font-size: 16px;padding-left: 35%;">
+        Select Chart Type Here : 
+        <select id="select_chart" style="font-size: 14px;">
+            <option value="scatter">Scatter Chart</option>
+            <option value="bar">Bar Chart</option>
+          </select>
+    </form>
+    
+    <div id="my_dataviz"></div>
+</div>
+    
+<script>
+function range(size, startAt = 0) {
+    return [...Array(size).keys()].map(i => i + startAt);
+}
+
+const data = [35, 21, 38, 77, 32, 44, 47, 80, 37, 50, 62, 49, 92, 63, 62, 72, 63, 157, 83, 65,
+103, 90, 87, 183, 86, 109, 108, 95, 72, 92, 92, 108];
+const margin = { top: 20, right: 30, bottom: 50, left: 60 };
+const width = 800 - margin.left - margin.right;
+const height = 500 - margin.top - margin.bottom;
+
+// Create SVG element
+var svg = d3.select("#my_dataviz")
+.append("svg")
+.attr("width", width + margin.left + margin.right)
+.attr("height", height + margin.top + margin.bottom)
+.append("g")
+.attr("transform", `translate(${margin.left},${margin.top})`);
+
+// Create scales for x and y axes
+let x_axis = d3.scaleLinear()
+.domain([0, data.length]) 
+.range([0, width])
+
+let y_axis = d3.scaleLinear()
+.domain([0, 200])
+.range([height, 0]);
+
+// Create circles for the data points
+svg.selectAll("circle")
+.data(data)
+.enter()
+.append("circle")
+.attr("cx", (d, i) => x_axis(i+1)) // Use index position as x-coordinate
+.attr("cy", (d) => y_axis(d))
+.attr("r", 4)
+.style("fill", "#69a3b2"); // Radius of circles
+
+// Add x and y axes
+svg.append("g")
+.call(d3.axisBottom(x_axis).tickSize(2).tickValues(range(data.length,1)))
+.attr("transform", `translate(0,${height})`)
+.style("font-size", 12);
+
+svg.append("g")
+.call(d3.axisLeft(y_axis))
+.style("font-size", 12);
+
+// y title 
+svg.append("text")
+.attr("transform", "rotate(-90)")
+.attr("y", -margin.left+20)
+.attr("x", -margin.top-height/2 -50)
+.text("Total Gold Medals");
+
+// x title
+svg.append("text")
+.attr("x", width/2 -50)
+.attr("y", height + margin.bottom-10)
+.text("SEA Games No.");
+
+function updateChart(){
+    const select = document.getElementById('select_chart').value;
+    if (select == 'bar'){
+        svg.selectAll("circle").remove();
+        let x_axis = d3.scaleBand()
+        .domain(data.map((d, i) => i + 1)) // X-axis labels
+        .range([0, width])
+        .padding(0.5);
+
+        let y_axis = d3.scaleLinear()
+        .domain([0, 200])
+        .nice()
+        .range([height, 0]);
+
+        svg.selectAll("rect")
+        .data(data)
+        .enter()
+        .append("rect")
+        .attr("x", (d, i) => x_axis(i + 1))
+        .attr("y", (d) => y_axis(d))
+        .attr("width", x_axis.bandwidth())
+        .attr("height", (d) => height - y_axis(d))
+        .attr("fill", "#69a3b2");
+    } else if (select == 'scatter'){
+        svg.selectAll("rect").remove();
+        let x_axis = d3.scaleLinear()
+        .domain([0, data.length]) 
+        .range([0, width])
+
+        let y_axis = d3.scaleLinear()
+        .domain([0, 200])
+        .range([height, 0]);
+
+        svg.selectAll("circle")
+        .data(data)
+        .enter()
+        .append("circle")
+        .attr("cx", (d, i) => x_axis(i+1)) // Use index position as x-coordinate
+        .attr("cy", (d) => y_axis(d))
+        .attr("r", 4)
+        .style("fill", "#69a3b2");
+    }
+}
+document.getElementById("select_chart").addEventListener("change", updateChart);
+
+</script>
+</body>
+</html>
