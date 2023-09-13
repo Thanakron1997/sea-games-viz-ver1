@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://d3js.org/d3.v7.js"></script>
+    <script src="script.js"></script>
+    <style>
+        .grid-container {
+        margin: 10px;
+        padding: 10px;
+        display: inline-grid;
+        column-gap: 10px;
+        grid-template-columns: auto auto auto;
+        background-color: #e6e6e6;
+        }
+        
+        .grid-item {
+        border: 2px solid rgba(255, 255, 255, 0.8);
+        padding: 10px;
+        }
+        div.tooltip {
+        position: absolute;
+        text-align: center;
+        padding: .2rem;
+        background: #313639;
+        color: #f9f9f9;
+        border: 0px;
+        border-radius: 8px;
+        pointer-events: none;
+        font-size: .7rem;
+        }
+        body {
+        background-color: rgb(205, 205, 205);
+        }
+    </style>
+    <title>SEA GAMES MEDALS</title>
+</head>
+<body>
+    <div id="head_1" style="margin-top: 50px;">
+    </div>
+    <div class="grid-container">
+        <div class="grid-item">
+                <div>
+                    <input type="button"
+                        onclick="checkAll()"
+                        value="Check All">
+                    <input type="button"
+                        onclick="uncheckAll()"
+                        value="Uncheck All">
+                </div>
+            <div id="checkbox_1" style="width: 200px; margin-top: 10px;">
+            </div>
+            <div>
+                <p style="text-align: center;color: red;font-weight: bolder;">Star Mark = Host.</p>
+            </div>
+        </div>
+        <div class="grid-item">
+            <div id="my_dataviz">
+            </div> 
+        </div>
+    </div>
+</body>
+</html>
